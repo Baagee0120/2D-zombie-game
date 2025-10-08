@@ -12,12 +12,12 @@ import main.GamePanel;
 
 public class TileManager {
 	GamePanel gp;
-	Tile[] tile;
-	int mapTileNum[][];
+	public Tile[] tile;
+	public int mapTileNum[][];
 	public TileManager(GamePanel gp) {
 		this.gp = gp;
 		tile = new Tile[10];
-		mapTileNum = new int[gp.maxWorldRow][gp.maxWorldCol];
+		mapTileNum = new int[gp.maxWorldCol][gp.maxWorldRow];
 		getTileImage();
 		LoadMap("/maps/map01.txt");
 		
@@ -39,6 +39,9 @@ public class TileManager {
 			
 			tile[4] = new Tile();
 			tile[4].image = ImageIO.read(getClass().getResourceAsStream("/tiles/tree.png"));
+			tile[4].collision = true;
+			
+			
 			
 			tile[5] = new Tile();
 			tile[5].image = ImageIO.read(getClass().getResourceAsStream("/tiles/earth.png"));
@@ -84,14 +87,19 @@ public class TileManager {
 		
 		
 		
-	    for (int worldRow = 0; worldRow < gp.maxWorldRow; worldRow++) {
-	        for (int worldCol = 0; worldCol < gp.maxWorldCol; worldCol++) {
+	    for (int worldCol = 0; worldCol < gp.maxWorldCol; worldCol++) {
+	        for (int worldRow = 0; worldRow < gp.maxWorldRow; worldRow++) {
 	            int tileNum = mapTileNum[worldRow][worldCol];
-	            int x = worldCol * gp.tileSize;
-	            int y = worldRow * gp.tileSize;
+	            int x = worldRow * gp.tileSize;
+	            int y = worldCol * gp.tileSize;
 	            int screenX = x - gp.player.worldX + gp.player.screenX;
 	            int screenY = y - gp.player.worldY + gp.player.screenY;
-	            g2.drawImage(tile[tileNum].image, screenX, screenY, gp.tileSize, gp.tileSize, null);
+	            if(x + gp.tileSize > gp.player.worldX - gp.player.screenX && x - gp.tileSize < gp.player.worldX +gp.player.screenX &&
+	               y + gp.tileSize > gp.player.worldY - gp.player.screenY && y - gp.tileSize< gp.player.worldY + gp.player.screenY) {
+	            	 g2.drawImage(tile[tileNum].image, screenX, screenY, gp.tileSize, gp.tileSize, null);
+	            }
+	            		
+	           
 	        }
 	    }
 	}
