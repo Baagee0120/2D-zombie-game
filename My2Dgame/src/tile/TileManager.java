@@ -97,7 +97,9 @@ public class TileManager {
 	            if(x + gp.tileSize > gp.player.worldX - gp.player.screenX && x - gp.tileSize < gp.player.worldX +gp.player.screenX &&
 	               y + gp.tileSize > gp.player.worldY - gp.player.screenY && y - gp.tileSize< gp.player.worldY + gp.player.screenY) {
 	            	 g2.drawImage(tile[tileNum].image, screenX, screenY, gp.tileSize, gp.tileSize, null);
+	            	 
 	            }
+	       
 	            		
 	           
 	        }

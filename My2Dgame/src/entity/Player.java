@@ -39,7 +39,7 @@ public class Player extends Entity{
 		
 		public void setDefaultValues() {
 			 worldX = gp.tileSize * 23;
-			 worldY = gp.tileSize * 21;
+			 worldY = gp.tileSize * 7;
 			 speed = 4;
 			 direction = "down";
 		}
@@ -85,6 +85,7 @@ public class Player extends Entity{
 					case"left":worldX-=speed; break;
 					case "right":worldX+=speed; break;
 			}
+				
 		}
 			spriteCounter++;
 			if(spriteCounter > 12) {
@@ -96,7 +97,10 @@ public class Player extends Entity{
 				}
 				spriteCounter = 0;
 			}
+			System.out.println("WorldX:" + worldX + "  " + "WorldY: " + worldY);
 			}
+			
+		
 		}
 		public void draw(Graphics2D g2) {
 //			g2.setColor(Color.white);
