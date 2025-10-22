@@ -30,10 +30,10 @@ public class TileManager {
 			
 			tile[1] = new Tile();
 			tile[1].image = ImageIO.read(getClass().getResourceAsStream("/tiles/wall.png"));
-			
+			tile[1].collision = true;
 			tile[2] = new Tile();
 			tile[2].image = ImageIO.read(getClass().getResourceAsStream("/tiles/water.png"));
-			
+			tile[2].collision = true;
 			tile[3] = new Tile();
 			tile[3].image = ImageIO.read(getClass().getResourceAsStream("/tiles/sand.png"));
 			
@@ -60,17 +60,17 @@ public class TileManager {
 	        InputStream is = getClass().getResourceAsStream(filePath);
 	        BufferedReader br = new BufferedReader(new InputStreamReader(is));
 
-	        int row = 0;
+	        int col = 0;
 
-	        while (row < gp.maxWorldRow) {
+	        while (col < gp.maxWorldCol) {
 	            String line = br.readLine();
 	            String numbers[] = line.split(" ");
 
-	            for (int col = 0; col < gp.maxWorldCol; col++) {
-	                int num = Integer.parseInt(numbers[col]);
-	                mapTileNum[row][col] = num;
+	            for (int row = 0; row < gp.maxWorldRow; row++) {
+	                int num = Integer.parseInt(numbers[row]);
+	                mapTileNum[col][row] = num;
 	            }
-	            row++;
+	            col++;
 	        }
 
 	        br.close();
@@ -89,7 +89,9 @@ public class TileManager {
 		
 	    for (int worldCol = 0; worldCol < gp.maxWorldCol; worldCol++) {
 	        for (int worldRow = 0; worldRow < gp.maxWorldRow; worldRow++) {
-	            int tileNum = mapTileNum[worldRow][worldCol];
+	        	
+	            int tileNum = mapTileNum[worldCol][worldRow];
+	            
 	            int x = worldRow * gp.tileSize;
 	            int y = worldCol * gp.tileSize;
 	            int screenX = x - gp.player.worldX + gp.player.screenX;
@@ -99,11 +101,14 @@ public class TileManager {
 	            	 g2.drawImage(tile[tileNum].image, screenX, screenY, gp.tileSize, gp.tileSize, null);
 	            	 
 	            }
+	         
 	       
 	            		
 	           
 	        }
 	    }
+	    
+	
 	}
 
 

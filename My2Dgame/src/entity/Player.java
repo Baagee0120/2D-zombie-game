@@ -38,8 +38,8 @@ public class Player extends Entity{
 		}
 		
 		public void setDefaultValues() {
-			 worldX = gp.tileSize * 23;
-			 worldY = gp.tileSize * 7;
+			 worldX = gp.tileSize * 9;
+			 worldY = gp.tileSize * 13;
 			 speed = 4;
 			 direction = "down";
 		}
@@ -77,6 +77,7 @@ public class Player extends Entity{
 			collisionOn = false;
 			gp.cChecker.checkTile(this);
 			//IF COLLISION IS FALSE, PLAYER CAN MOVE
+			
 			if(collisionOn == false){
 				
 				switch(direction){
@@ -97,15 +98,13 @@ public class Player extends Entity{
 				}
 				spriteCounter = 0;
 			}
-			System.out.println("WorldX:" + worldX + "  " + "WorldY: " + worldY);
+		
 			}
 			
 		
 		}
 		public void draw(Graphics2D g2) {
-//			g2.setColor(Color.white);
-//			
-//			g2.fillRect(X, Y, gp.tileSize, gp.tileSize);
+
 			
 			BufferedImage image = null;
 			
@@ -123,7 +122,7 @@ public class Player extends Entity{
 				image = down1;
 				}
 				if(spriteNum == 2) {
-					image = down2;
+				image = down2;
 				}
 				break;
 			case "left":
