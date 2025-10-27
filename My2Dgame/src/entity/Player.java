@@ -2,6 +2,7 @@ package entity;
 
 
 
+import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
@@ -14,14 +15,15 @@ import main.Keyhandler;
 
 
 public class Player extends Entity{
-	GamePanel gp;
+	
 	Keyhandler keyH;
 	public final int screenX;
 	public final int screenY;
+	public int hasKey = 0;
 	
 
 		public Player(GamePanel gp, Keyhandler keyH) {
-			this.gp = gp;
+			super(gp);
 			this.keyH = keyH;
 			
 			setDefaultValues();
@@ -30,11 +32,14 @@ public class Player extends Entity{
 			screenX = gp.screenWidth/2 - (gp.tileSize/2);
 			screenY = gp.screenLength/2 - (gp.tileSize/2);
 			
-			solidArea = new Rectangle();
+		    solidArea = new Rectangle();
 			solidArea.x = 8;
 			solidArea.y = 16;
+			solidAreaDefaultX = solidArea.x;
+			solidAreaDefaultY = solidArea.y;
 			solidArea.width = 32;
 			solidArea.height = 32;
+			
 		}
 		
 		public void setDefaultValues() {
@@ -42,6 +47,10 @@ public class Player extends Entity{
 			 worldY = gp.tileSize * 13;
 			 speed = 4;
 			 direction = "down";
+			 
+			 maxLife = 6;
+			 life = maxLife;
+			 
 		}
 		public void getPlayerImage() {
 			try {
@@ -76,6 +85,15 @@ public class Player extends Entity{
 			//CHECK TILE COLLISION
 			collisionOn = false;
 			gp.cChecker.checkTile(this);
+			
+			//check object collision
+			int objIndex = gp.cChecker.checkObject(this, true);
+			
+			
+			pickUpObject(objIndex);
+			
+			int monsterIndex = gp.cChecker.checkEntity(this, gp.monster);
+			contactMonster(monsterIndex);
 			//IF COLLISION IS FALSE, PLAYER CAN MOVE
 			
 			if(collisionOn == false){
@@ -101,8 +119,71 @@ public class Player extends Entity{
 		
 			}
 			
-		
+			else {
+				standCounter++;
+				if(standCounter == 20) {
+				spriteNum = 1;
+				standCounter = 0;
+				}
+			}
+			if (invincible == true) {
+				invCounter++;
+				if(invCounter > 60) {
+					invincible = false;
+					invCounter = 0;
+				}
+			}
 		}
+		
+		public void pickUpObject(int i) {
+			if(i != 999) {
+				String objectName = gp.obj[i].name;
+				
+				switch(objectName) {
+				case "Key":
+					gp.playSE(5);
+					hasKey++;
+					gp.obj[i] = null;
+					break;
+				case "Door":
+					if(hasKey > 0) {
+						gp.playSE(1);
+						gp.obj[i] = null;
+						hasKey--;
+					}
+					break;
+				case "Chest":
+					if(hasKey > 0) {
+						gp.gameState = gp.overState;
+						gp.stopMusic();
+						gp.playSE(3);
+					}
+					break;
+				case "Boots":
+					gp.playSE(6);
+					speed +=1;
+					
+					gp.obj[i] = null;
+					break;
+				}
+			}
+		}
+		public void contactMonster(int i) {
+			if(i != 999) {
+				if(invincible == false) {
+				life-=1;
+				invincible = true;
+				gp.playSE(7);
+				if(life == 0) {
+					gp.gameState = gp.overState;
+					gp.stopMusic();
+					gp.playSE(3);
+				}
+				}
+			}
+			
+		}
+		
 		public void draw(Graphics2D g2) {
 
 			
@@ -144,6 +225,8 @@ public class Player extends Entity{
 			}
 			
 			g2.drawImage(image,  screenX,  screenY,  gp.tileSize,  gp.tileSize, null);
+			g2.setColor(Color.RED);
+			g2.drawRect(screenX + solidArea.x, screenY+ solidArea.y, solidArea.width, solidArea.height );
 		}
 
 	
